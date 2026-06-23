@@ -1,0 +1,68 @@
+select * from scott.emp;
+
+select deptno, round(AVG(sal)) from scott.emp group by deptno order by deptno;
+
+select * from scott.emp where sal>=(select round(avg(sal)) from scott.emp);
+
+select * from scott.emp o where sal>=(select round(avg(sal)) from scott.emp i where i.deptno=o.deptno) order by deptno;
+
+select count(empno),deptno from scott.emp group by deptno order by deptno desc;
+
+
+
+select count(empno) as emp_count,deptno from scott.emp group by deptno order by emp_count DESC FETCH FIRST 1 ROW ONLY;
+
+SELECT
+    SELECT
+    a.empno,
+    a.ename,
+    b.empno AS mgr_empno,
+    b.ename AS mgr_name,
+    c.empno AS skip_mgr_empno,
+    c.ename AS skip_mgr_name
+FROM scott.emp a
+LEFT JOIN scott.emp b
+    ON a.mgr = b.empno
+LEFT JOIN scott.emp c
+    ON b.mgr = c.empno;
+FROM scott.emp a
+LEFT JOIN scott.emp b
+    ON a.mgr = b.empno
+LEFT JOIN scott.emp c
+    ON b.mgr = c.empno;
+
+
+create table salesman(
+    salesman_id int not null,
+    salesman_name varchar2(20),
+    salesman_city varchar2(20),
+    commission int
+)
+
+-- Insert one row
+INSERT INTO salesman VALUES(5001, 'James Hoog', 'New York', 15);
+INSERT INTO salesman VALUES(5002, 'Nail Knite', 'Paris', 13);
+
+-- Insert multiple rows at once
+INSERT ALL
+    INTO salesman VALUES(5005, 'Pit Alex', 'London', 11)
+    INTO salesman VALUES(5006, 'McLyon', 'Paris', 14)
+    INTO salesman VALUES(5007, 'Paul Adam', 'Rome', 13)
+    INTO salesman VALUES(5003, 'Lauson Hen', 'San Jose', 12)
+SELECT 1 FROM DUAL;
+
+-- View data from all columns
+SELECT * FROM salesman;
+
+
+select C.COUNTRY_NAME, L.CITY, D.DEPARTMENT_NAME, E.EMPLOYEE_ID,E.FIRST_NAME,E.LAST_NAME,
+M.FIRST_NAME MGR_FIRST,M.LAST_NAME MGR_LAST,M.EMPLOYEE_ID MGR_ID
+from HR.EMPLOYEES E LEFT JOIN HR.EMPLOYEES M
+ON E.MANAGER_ID = M.EMPLOYEE_ID
+full join HR.DEPARTMENTS D
+ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+full join HR.LOCATIONS L
+ON D.LOCATION_ID = L.LOCATION_ID
+full join HR.COUNTRIES C
+ON L.COUNTRY_ID = C.COUNTRY_ID
+ORDER BY E.EMPLOYEE_ID;
